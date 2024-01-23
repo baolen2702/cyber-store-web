@@ -11,7 +11,7 @@ const Promotion = () => {
         </h1>
         <p className="text-md">
           The generated Lorem Ipsum is therefore always free from repetition
-          injected humour, or non-characteristic words etc.
+          injected humour, or non-characteristic words etc
         </p>
         <Button className="rounded-full" size="lg" variant="outline">BUY NOW</Button>
       </div>
