@@ -15,7 +15,7 @@ export interface IProduct {
   description?: string;
   image: string;
   isActive: boolean;
-  price?: number;
+  price: number;
   category: ICategory;
   categoryId: number;
   createdAt: Date;

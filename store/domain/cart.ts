@@ -29,7 +29,7 @@ export class CartStore {
     });
     return quantity;
   }
-  updateQuantity(itemId: string, value: number) {
+  updateQuantity(itemId: number, value: number) {
     const index = this.items.findIndex((item) => item.id === itemId);
     this.items[index] = { ...this.items[index], quantity: value };
   }
