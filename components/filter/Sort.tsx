@@ -1,3 +1,4 @@
+"use client";
 import {
   Select,
   SelectContent,
@@ -6,19 +7,36 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ProductSortField, SortOrder } from "@/data/products";
+import { useQueryParams } from "@/hooks/queryParams";
 
 const Sort = () => {
+  const { setQueryParams } = useQueryParams();
   return (
-    <Select>
+    <Select
+      onValueChange={(value) => {
+        const [sortBy, sortOrder] = value.split(":");
+        setQueryParams("sortBy", sortBy);
+        setQueryParams("sortOrder", sortOrder);
+      }}
+    >
       <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select language" />
+        <SelectValue placeholder="Sort by" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectItem value="nothing">Nothing</SelectItem>
-          <SelectItem value="popularity"> Popularity</SelectItem>
-          <SelectItem value="organic">Organic</SelectItem>
-          <SelectItem value="fantastic">Fantastic</SelectItem>
+          <SelectItem value={`${ProductSortField.CreatedAt}:${SortOrder.Asc}`}>
+            Price: high to low
+          </SelectItem>
+          <SelectItem value={`${ProductSortField.CreatedAt}:${SortOrder.Desc}`}>
+            Price: low to high
+          </SelectItem>
+          <SelectItem value={`${ProductSortField.Price}:${SortOrder.Asc}`}>
+            Date: new to old
+          </SelectItem>
+          <SelectItem value={`${ProductSortField.Price}:${SortOrder.Desc}`}>
+            Date: old to new
+          </SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

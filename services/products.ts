@@ -7,21 +7,25 @@ import { fetcher } from "@/lib/fetcher";
 
 export const fetchProducts = async (query: IFetchProductsQuery) => {
   const searchParams = new URLSearchParams();
-  searchParams.set("page", query.page.toString());
-  searchParams.set("take", query.take.toString());
+  searchParams.append("page", query.page.toString());
+  searchParams.append("take", query.take.toString());
   if (query.name) {
-    searchParams.set("name", query.name);
+    searchParams.append("name", query.name);
   }
-  if (query.createdAt) {
-    searchParams.set("createdAt", query.createdAt);
-  }
-  if (query.categoryIds && query.categoryIds.length > 0) {
-    searchParams.set("categoryIds", query.categoryIds.join(","));
+  if (query.sortBy) {
+    searchParams.append("createdAt", query.sortBy);
   }
 
-  return fetcher<IListProductResponse>(
-    `product?${searchParams.toString()}`
-  );
+  if (query.categoryId && Array.isArray(query.categoryId)) {
+    query.categoryId.forEach((id) => {
+      searchParams.append("categoryId", id.toString());
+    });
+  } else if (query.categoryId && !Array.isArray(query.categoryId)) {
+    searchParams.append("categoryId", query.categoryId);
+  }
+  console.log(`product?${searchParams.toString()}`);
+  
+  return fetcher<IListProductResponse>(`product?${searchParams.toString()}`);
 };
 export const getProductById = (id: number) => {
   return fetcher<IProductResponse>(`product/${id}`);
