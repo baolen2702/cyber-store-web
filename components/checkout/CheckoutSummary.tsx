@@ -24,12 +24,7 @@ const CheckoutSummary = observer(() => {
   );
   const totalFee = useMemo(() => {
     return deliveryFee + store.cartStore.totalPrice + taxFee;
-  }, [
-    store.uiSettingStore.tax,
-    store.cartStore.totalPrice,
-    store.orderStore.paymentMethod,
-    deliveryFee,
-  ]);
+  }, [deliveryFee, store.cartStore.totalPrice, taxFee]);
 
   return (
     <div className="w-full h-fit space-y-4 bg-gray-100 p-4 rounded-lg">
@@ -47,7 +42,7 @@ const CheckoutSummary = observer(() => {
       <div className="w-full space-y-4">
         {store.orderStore.order &&
           store.orderStore.order.items.map((item) => (
-            <div className="flex items-center gap-3">
+            <div key={item.id} className="flex items-center gap-3">
               <Avatar className="rounded-lg">
                 <AvatarImage src={item.image} />
                 <AvatarFallback>CN</AvatarFallback>
