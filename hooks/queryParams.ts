@@ -1,4 +1,3 @@
-"use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
@@ -16,8 +15,6 @@ export const useQueryParams = () => {
     } else {
       param = new URLSearchParams(value.map((e) => [name, e]));
     }
-    console.log(`${pathName}?${params.toString()}&${param.toString()}`);
-
     router.push(`${pathName}?${params.toString()}&${param.toString()}`);
   };
 

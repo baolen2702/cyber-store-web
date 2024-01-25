@@ -13,33 +13,38 @@ import { useQueryParams } from "@/hooks/queryParams";
 const Sort = () => {
   const { setQueryParams } = useQueryParams();
   return (
-    <Select
-      onValueChange={(value) => {
-        const [sortBy, sortOrder] = value.split(":");
-        setQueryParams("sortBy", sortBy);
-        setQueryParams("sortOrder", sortOrder);
-      }}
-    >
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Sort by" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectItem value={`${ProductSortField.CreatedAt}:${SortOrder.Asc}`}>
-            Price: high to low
-          </SelectItem>
-          <SelectItem value={`${ProductSortField.CreatedAt}:${SortOrder.Desc}`}>
-            Price: low to high
-          </SelectItem>
-          <SelectItem value={`${ProductSortField.Price}:${SortOrder.Asc}`}>
-            Date: new to old
-          </SelectItem>
-          <SelectItem value={`${ProductSortField.Price}:${SortOrder.Desc}`}>
-            Date: old to new
-          </SelectItem>
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <div className="flex gap-3 items-center">
+      <Select
+        onValueChange={(value) => {
+          setQueryParams("sortBy", value);
+        }}
+      >
+        <SelectTrigger className="w-[90px]">
+          <SelectValue placeholder="Sort by" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value={ProductSortField.CreatedAt}>Date</SelectItem>
+            <SelectItem value={ProductSortField.Price}>Price</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      <Select
+        onValueChange={(value) => {
+          setQueryParams("sortOrder", value);
+        }}
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Sort direction" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value={SortOrder.Asc}>Ascending</SelectItem>
+            <SelectItem value={SortOrder.Desc}>Descending</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </div>
   );
 };
 

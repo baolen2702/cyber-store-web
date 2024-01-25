@@ -12,6 +12,7 @@ export const fetchProducts = async (query: IFetchProductsQuery) => {
   if (query.name) {
     searchParams.append("name", query.name);
   }
+
   if (query.sortBy) {
     searchParams.append("createdAt", query.sortBy);
   }
@@ -20,12 +21,15 @@ export const fetchProducts = async (query: IFetchProductsQuery) => {
     query.categoryId.forEach((id) => {
       searchParams.append("categoryId", id.toString());
     });
-  } else if (query.categoryId && !Array.isArray(query.categoryId)) {
+  }
+
+  if (query.categoryId && !Array.isArray(query.categoryId)) {
     searchParams.append("categoryId", query.categoryId);
   }
-  console.log(`product?${searchParams.toString()}`);
-  
-  return fetcher<IListProductResponse>(`product?${searchParams.toString()}`);
+
+  return fetcher<IListProductResponse>(`product?${searchParams.toString()}`, {
+    next: { tags: [`product?${searchParams.toString()}`] },
+  });
 };
 export const getProductById = (id: number) => {
   return fetcher<IProductResponse>(`product/${id}`);
