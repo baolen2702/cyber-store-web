@@ -1,22 +1,30 @@
 "use client";
 import { useQueryParams } from "@/hooks/queryParams";
+import { useDebounce } from "@/hooks/useDebounce";
 import * as Slider from "@radix-ui/react-slider";
 import { useEffect, useState } from "react";
 
 const PriceFilter = () => {
-  const [value, setValue] = useState([0, 100]);
+  const [value, setValue] = useState([0, 1000]);
   const { setQueryParams } = useQueryParams();
+  const debouncedValue = useDebounce<number[]>(value, 800);
+
+  useEffect(() => {
+    setQueryParams(
+      "price",
+      debouncedValue.map((v) => v.toString())
+    );
+  }, [debouncedValue]);
 
   return (
     <div className="w-full space-y-4">
       <div className="text-xl font-semibold">Price</div>
       <Slider.Root
-        max={1000}
+        max={100}
         step={1}
         value={value}
-        onValueChange={(value) => {
-          setValue(value);
-          setQueryParams("price", value.join(","));
+        onValueChange={(values) => {
+          setValue(values);
         }}
         className="relative flex w-full touch-none select-none items-center"
       >

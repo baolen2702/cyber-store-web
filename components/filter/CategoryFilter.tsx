@@ -1,19 +1,31 @@
 "use client";
 import { Checkbox } from "@/components/ui/checkbox";
-
 import { useQueryParams } from "@/hooks/queryParams";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { useStore } from "../provider/StoreProvider";
+import { CheckedState } from "@radix-ui/react-checkbox";
+import { ICategory } from "@/data/category";
 const CategoryFilter = observer(() => {
   const store = useStore();
   const categories = store ? store.categories : [];
-  const [values, setValues] = useState<string[]>([]);
-  const { setQueryParams } = useQueryParams();
+
+  const { searchParams, setQueryParams } = useQueryParams();
+  const [values, setValues] = useState<string[]>(
+    searchParams.getAll("categoryId")
+  );
 
   useEffect(() => {
-    values.length > 0 && setQueryParams("categories", values.join(","));
+    setQueryParams("categoryId", values);
   }, [values]);
+
+  const handleCheckChange = (value: CheckedState, category: ICategory) => {
+    if (value) {
+      setValues((prev) => [...prev, category.id.toString()]);
+    } else {
+      setValues((prev) => prev.filter((e) => e !== category.id.toString()));
+    }
+  };
 
   return (
     <div className="w-full space-y-4">
@@ -23,15 +35,8 @@ const CategoryFilter = observer(() => {
           <div key={category.id} className="flex items-center space-x-2">
             <Checkbox
               id={category.id.toString()}
-              onCheckedChange={(value) => {
-                if (value) {
-                  setValues((prev) => [...prev, category.id.toString()]);
-                } else {
-                  setValues((prev) =>
-                    prev.filter((e) => e !== category.id.toString())
-                  );
-                }
-              }}
+              checked={values.includes(category.id.toString())}
+              onCheckedChange={(value) => handleCheckChange(value, category)}
             />
             <label
               htmlFor={category.id.toString()}

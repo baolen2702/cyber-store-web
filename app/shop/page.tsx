@@ -2,6 +2,7 @@ import AppPagination from "@/components/AppPagination";
 import Filter from "@/components/filter";
 import Sort from "@/components/filter/Sort";
 import ProductList from "@/components/product/ProductList";
+import { ProductSortField, SortOrder } from "@/data/products";
 import { fetchProducts } from "@/services/products";
 const LIMIT_PRODUCTS = 12;
 export default async function ShopPage({
@@ -11,9 +12,20 @@ export default async function ShopPage({
 }) {
   const urlSearchParams = new URLSearchParams(searchParams);
   const page = urlSearchParams.get("page") || "1";
+  const categoryId = urlSearchParams.get("categoryId") || "";
+  console.log({ categoryId });
+
+  const sortBy =
+    (urlSearchParams.get("sortBy") as ProductSortField) ||
+    ProductSortField.CreatedAt;
+  const sortOrder =
+    (urlSearchParams.get("sortOrder") as SortOrder) || SortOrder.Asc;
   const producResponse = await fetchProducts({
     page: Number(page),
     take: LIMIT_PRODUCTS,
+    categoryId: categoryId,
+    sortBy,
+    sortOrder,
   });
 
   return (
@@ -24,10 +36,12 @@ export default async function ShopPage({
           <Sort />
         </div>
         <ProductList products={producResponse.data} />
-        <AppPagination
-          totalPages={Number(producResponse.meta.pageCount)}
-          page={Number(producResponse.meta.page)}
-        />
+        {producResponse.meta && (
+          <AppPagination
+            totalPages={Number(producResponse.meta.pageCount)}
+            page={Number(producResponse.meta.page)}
+          />
+        )}
       </div>
     </div>
   );
