@@ -8,24 +8,23 @@ const LIMIT_PRODUCTS = 12;
 export default async function ShopPage({
   searchParams,
 }: {
-  searchParams: any;
+  searchParams: {
+    price?: string[];
+    categoryId?: string[];
+    page?: string;
+    sortBy?: ProductSortField;
+    sortOrder?: SortOrder;
+  };
 }) {
-  const urlSearchParams = new URLSearchParams(searchParams);
-  const page = urlSearchParams.get("page") || "1";
-  const categoryId = urlSearchParams.get("categoryId") || "";
-  console.log({ categoryId });
+  const page = searchParams.page ? Number(searchParams.page) : 1;
+  const categoryId = searchParams.categoryId || [];
 
-  const sortBy =
-    (urlSearchParams.get("sortBy") as ProductSortField) ||
-    ProductSortField.CreatedAt;
-  const sortOrder =
-    (urlSearchParams.get("sortOrder") as SortOrder) || SortOrder.Asc;
   const producResponse = await fetchProducts({
-    page: Number(page),
+    page,
     take: LIMIT_PRODUCTS,
     categoryId: categoryId,
-    sortBy,
-    sortOrder,
+    sortBy: searchParams.sortBy,
+    sortOrder: searchParams.sortOrder,
   });
 
   return (

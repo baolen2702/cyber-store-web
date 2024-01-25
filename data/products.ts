@@ -16,7 +16,7 @@ export interface IFetchProductsQuery {
   name?: string;
   sortOrder?: SortOrder;
   sortBy?: ProductSortField;
-  categoryId?: string;
+  categoryId?: string[] | string;
 }
 export interface IProduct {
   id: number;

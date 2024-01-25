@@ -17,7 +17,7 @@ const CategoryFilter = observer(() => {
 
   useEffect(() => {
     setQueryParams("categoryId", values);
-  }, [values]);
+  }, [setQueryParams, values]);
 
   const handleCheckChange = (value: CheckedState, category: ICategory) => {
     if (value) {
